@@ -13,6 +13,7 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   static List<int> snakePosition = [45, 65, 85, 105, 125];
   int numberOfSquares = 760;
+  bool isGameOver = true;
 
   static var randomNumber = Random();
   int food = randomNumber.nextInt(600);
@@ -22,15 +23,19 @@ class _GamePageState extends State<GamePage> {
   }
 
   void startGame() {
-    snakePosition = [45, 65, 85, 105, 125];
-    const duration = Duration(milliseconds: 300);
-    Timer.periodic(duration, (Timer time) {
-      updateSnake();
-      if (gameOver()) {
-        time.cancel();
-        showGameOverScreen();
-      }
-    });
+    if (isGameOver) {
+      isGameOver = false;
+      snakePosition = [45, 65, 85, 105, 125];
+      const duration = Duration(milliseconds: 300);
+      Timer.periodic(duration, (Timer time) {
+        updateSnake();
+        if (gameOver()) {
+          time.cancel();
+          showGameOverScreen();
+          isGameOver = true;
+        }
+      });
+    }
   }
 
   var direction = 'down';
